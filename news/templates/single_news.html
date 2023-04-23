@@ -1,0 +1,19 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}!
+
+{% block title %}
+Post
+{% endblock title %}
+
+{% block content %}
+   <h1>Статья/новость</h1>
+<h2> {{ single.title|censor }} </h2>
+<p>
+{{ single.dateCreation|currency }}
+<p>
+{{ single.text|censor }}
+   {% if single.author == request.user.author %}
+      <p><a href="{% url 'post_edit' single.pk %}"><input type="submit" value="Редактировать" /></a></p>
+      <p><a href="{% url 'post_delete' single.pk %}"><input type="submit" value="Удалить" /></a></p>
+   {% endif %}
+{% endblock content %}

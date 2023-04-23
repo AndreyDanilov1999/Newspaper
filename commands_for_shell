@@ -1,0 +1,79 @@
+from appnews.models import *
+
+#Создание пользователей
+u1 = User.objects.create_user(username='Mike')
+u2 = User.objects.create_user(username='Nick')
+
+#Создание авторов
+Author.objects.create(authorUser=u1)
+Author.objects.create(authorUser=u2)
+
+author1 = Author.objects.get(id=1)
+author2 = Author.objects.get(id=2)
+
+#Создание категорий
+Category.objects.create('IT')
+Category.objects.create('Sport')
+Category.objects.create('Games')
+Category.objects.create('Music')
+
+#Создание новостей, статей и присваивание им категорий
+Post.objects.create(author=author1, categoryType='NW', title='someheadline', text='anytext')
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1))
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=2))
+
+Post.objects.create(author=author1, categoryType='AR', title='some_article', text='text_article')
+Post.objects.get(id=2).postCategory.add(Category.objects.get(id=3))
+
+Post.objects.create(author=author2, categoryType='AR', title='some_article_aut2', text='text_article_aut2')
+Post.objects.get(id=3).postCategory.add(Category.objects.get(id=4))
+
+#Создание комментариев
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=User.objects.get(id=1), text='Good news!')
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=User.objects.get(id=2), text='Mediocre news')
+Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=User.objects.get(id=2), text='Nice')
+Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=User.objects.get(id=1), text='interesting article')
+
+#Присваивание лайков и дизлайков комментариям и постам
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=2).dislike()
+Comment.objects.get(id=3).like()
+Comment.objects.get(id=3).like()
+Comment.objects.get(id=4).like()
+Post.objects.get(id=1).like()
+Post.objects.get(id=1).like()
+Post.objects.get(id=1).like()
+Post.objects.get(id=2).like()
+Post.objects.get(id=2).like()
+Post.objects.get(id=3).like()
+
+
+a1 = Author.objects.get(id=1)
+a1.update_rating()
+a2 = Author.objects.get(id=2)
+a2.update_rating()
+
+#Поиск лучшего автора, исходя из рейтинга
+best_author = Author.objects.order_by('-ratingAuthor')[:1]
+for i in best_author:
+    i.authorUser.username
+    i.ratingAuthor
+
+#Поиск лучшей статьи автора
+best_news = Post.objects.order_by('-rating')[:1]
+for i in best_news:
+    i.dateCreation
+    i.author.authorUser.username
+    i.rating
+    i.title
+    i.preview()
+
+#Лучшая статья автора(с комментариями)
+comment_news = Post.objects.order_by('-rating')[0].comment_set.all()
+for i in comment_news:
+    i.dateCreation
+    i.commentUser.username
+    i.rating
+    i.text
+
+
