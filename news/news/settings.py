@@ -11,22 +11,23 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-qu%ya21my%h*n#05lo)z&@_g1y0x-ho5c6(d!j+_1wukext3pt'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -48,35 +49,39 @@ INSTALLED_APPS = [
     "django_apscheduler",
 ]
 
+SITE_ID = 1
+
+SITE_URL = 'http://127.0.0.1:8000'
+
+# ACCOUNT SETTINGS
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
+LOGIN_REDIRECT_URL = "/news"
+LOGOUT_REDIRECT_URL = "/accounts/login"
+
+# EMAIL SETTINGS
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
-# EMAIL_HOST_USER = ""
-# EMAIL_HOST_PASSWORD = ""
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
-
 DEFAULT_FROM_EMAIL = "andrey-danilov-99@yandex.ru"
-
 SERVER_EMAIL = "andrey-danilov-99@yandex.ru"
 MANAGERS = (
     ('Mike', 'dreshka.danilov@mail.ru'),
 )
 
+# APSCHEDULER SETTINGS
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 25
 
 ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignupForm"}
-
-SITE_ID = 1
-
-SITE_URL = 'http://127.0.0.1:8000'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -114,7 +119,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'news.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -124,7 +128,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -144,7 +147,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -155,7 +157,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -171,5 +172,11 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
-LOGIN_REDIRECT_URL = "/news"
-LOGOUT_REDIRECT_URL = "/accounts/login"
+# CELERY
+CELERY_BROKER_URL = 'redis://' + str(
+    os.getenv('SIGN_IN')) + '@redis-16498.c1.asia-northeast1-1.gce.cloud.redislabs.com:16498'
+CELERY_RESULT_BACKEND = 'redis://' + str(
+    os.getenv('SIGN_IN')) + '@redis-16498.c1.asia-northeast1-1.gce.cloud.redislabs.com:16498'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'

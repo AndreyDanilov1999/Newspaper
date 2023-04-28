@@ -35,7 +35,7 @@ def subscriptions(request):
     ).order_by('id')
     return render(
         request,
-        'subscriptions.html',
+        'sections/subscriptions.html',
         {'categories': categories_with_subscriptions},
     )
 
@@ -43,14 +43,14 @@ def subscriptions(request):
 class NewsList(ListView):
     model = Post
     ordering = 'dateCreation'
-    template_name = 'list_news.html'
+    template_name = 'sections/list_news.html'
     context_object_name = 'list_news'
     paginate_by = 10
 
 
 class SearchNews(ListView):
     model = Post
-    template_name = 'search_page.html'
+    template_name = 'sections/search_page.html'
     context_object_name = 'search_page'
     paginate_by = 10
 
@@ -76,7 +76,7 @@ class CreateNews(PermissionRequiredMixin, CreateView):
     permission_required = 'appnews.add_post'
     form_class = FormNews
     model = Post
-    template_name = 'create_news.html'
+    template_name = 'sections/create_news.html'
 
     def form_valid(self, form):
         post = form.save(commit=False)
@@ -89,7 +89,7 @@ class CreateArticle(PermissionRequiredMixin, CreateView):
     permission_required = 'appnews.add_post'
     form_class = FormArticle
     model = Post
-    template_name = 'create_article.html'
+    template_name = 'sections/create_article.html'
 
     def form_valid(self, form):
         post = form.save(commit=False)

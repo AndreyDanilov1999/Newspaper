@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from allauth.account.forms import SignupForm
 from django.core.mail import EmailMultiAlternatives, mail_managers
+from django.forms import ModelForm
 
 
 class SignUpForm(UserCreationForm):
@@ -27,9 +28,9 @@ class CustomSignupForm(SignupForm):
         user = super().save(request)
 
         subject = 'Добро пожаловать на новостной портал!'
-        text = f'{user.username}, вы успешно зарегистрировались на сайте!'
+        text = f'Поздравляем, {user.username}, Вы успешно зарегистрировались на сайте!'
         html = (
-            f'<b>{user.username}</b>, вы успешно зарегистрировались на '
+            f'Поздравляем, <b>{user.username}</b>, Вы успешно зарегистрировались на '
             f'<a href="http://127.0.0.1:8000/news">сайте</a>!'
         )
         msg = EmailMultiAlternatives(
@@ -43,3 +44,4 @@ class CustomSignupForm(SignupForm):
             message=f'Пользователь {user.username} зарегистрировался на сайте.'
         )
         return user
+
