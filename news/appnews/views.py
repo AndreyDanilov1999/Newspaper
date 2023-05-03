@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from .models import Post, Category, Subscriber
@@ -69,6 +70,15 @@ class SingleNews(DetailView):
     model = Post
     template_name = 'single_news.html'
     context_object_name = 'single'
+    queryset = Post.objects.all()
+
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'post-{self.kwargs["pk"]}', None)
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
+
+        return obj
 
 
 class CreateNews(PermissionRequiredMixin, CreateView):

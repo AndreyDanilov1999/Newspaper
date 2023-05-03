@@ -1,7 +1,7 @@
 from django.urls import path
-
 from accounts.views import Profile
 from .views import SingleNews, SearchNews, NewsList, CreateNews, CreateArticle, EditNews, DeleteNews
+
 
 urlpatterns = [
     path('', NewsList.as_view(), name='main'),
