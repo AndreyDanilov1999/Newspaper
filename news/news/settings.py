@@ -25,9 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '111.222.333.444',
+    'mywebsite.example'
+]
 
 # Application definition
 
@@ -174,9 +179,9 @@ STATICFILES_DIRS = [
 
 # CELERY
 CELERY_BROKER_URL = 'redis://' + str(
-    os.getenv('SIGN_IN')) + '@redis-16498.c1.asia-northeast1-1.gce.cloud.redislabs.com:16498'
+    os.getenv('SIGN_IN')) + '@redis-18295.c1.asia-northeast1-1.gce.cloud.redislabs.com:18295'
 CELERY_RESULT_BACKEND = 'redis://' + str(
-    os.getenv('SIGN_IN')) + '@redis-16498.c1.asia-northeast1-1.gce.cloud.redislabs.com:16498'
+    os.getenv('SIGN_IN')) + '@redis-18295.c1.asia-northeast1-1.gce.cloud.redislabs.com:18295'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -188,3 +193,113 @@ CACHES = {
         'LOCATION': os.path.join(BASE_DIR, 'cache_files'),
     }
 }
+
+# LOGGING
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'style': '{',
+    'formatters': {
+        'simple': {
+            'format': '%(asctime)s %(levelname)s %(message)s'
+        },
+        'verbose': {
+            'format': '%(asctime)s %(levelname)s %(module)s  %(message)s'
+        },
+        'verbose_2': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(message)s %(pathname)s'
+        },
+        'verbose_3': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(message)s %(pathname)s  %(exc_info)s'
+        },
+        'verbose_4': {
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s  %(exc_info)s'
+        },
+        'verbose_5': {
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s'
+        }
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'mail_admins': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'verbose_5',
+        },
+        'general': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'filename': 'general.log',
+            'formatter': 'verbose',
+        },
+        'warning': {
+            'level': 'WARNING',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose_2',
+        },
+        'error_and_critical': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose_3',
+        },
+        'errors': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.FileHandler',
+            'filename': 'errors.log',
+            'formatter': 'verbose_4',
+        },
+        'security': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'security.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'warning', 'error_and_critical'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['mail_admins', 'errors'],
+            'level': 'ERROR',
+        },
+        'django.server': {
+            'handlers': ['general', 'mail_admins', 'errors'],
+            'level': 'INFO',
+        },
+        'django.template': {
+            'handlers': ['errors'],
+            'level': 'ERROR',
+        },
+        'django.db.backends': {
+            'handlers': ['errors'],
+            'level': 'ERROR',
+        },
+        'django.security': {
+            'handlers': ['security'],
+            'level': 'DEBUG',
+        },
+    }
+}
+

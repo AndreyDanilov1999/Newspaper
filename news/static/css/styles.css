@@ -61,8 +61,9 @@
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
   --bs-body-color: #212529;
-  --bs-body-bg: #fff;
+  --bs-body-bg: #79c8e3;
 }
+
 
 *,
 *::before,
@@ -77,6 +78,7 @@
 }
 
 body {
+  background: url(scape.jpg);
   margin: 0;
   font-family: var(--bs-body-font-family);
   font-size: var(--bs-body-font-size);
@@ -84,7 +86,7 @@ body {
   line-height: var(--bs-body-line-height);
   color: var(--bs-body-color);
   text-align: var(--bs-body-text-align);
-  background-color: var(--bs-body-bg);
+  background-color: (--bs-body-bg);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -11285,4 +11287,62 @@ textarea.form-control-lg {
   .d-print-none {
     display: none !important;
   }
+}
+
+html {
+  background-image: url(https://ic.pics.livejournal.com/fan_project/84590605/2003286/2003286_original.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+body {
+  font-family: Roboto, sans;
+}
+
+header {
+  text-shadow: 0 1px 8px rgba(0,0,0,.2);
+  position: absolute;
+  top: 24px;
+  left: 24px;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1.2;
+  margin: 0;
+}
+
+h2 {
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0,0,0,.2);
+  margin-bottom: 0;
+  font-size: 48px;
+  font-weight: 300;
+  color: rgba(0,0,0,.7)
+}
+
+footer {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+a {
+  font-weight: lighter;
+  text-decoration: none;
+  color: rgba(0,0,0,.7);
+}
+
+a:hover {
+  color: #2196f3;
 }

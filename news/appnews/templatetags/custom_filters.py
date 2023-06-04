@@ -8,6 +8,24 @@ def currency(value):
     return f'Дата создания: {value.strftime("%d-%m-%Y")}'
 
 
+forbidden_words = [
+    'редиска',
+
+]
+
+
+@register.filter(name='censor_2')
+def hide_forbidden(value):
+    words = value.split()
+    result = []
+    for word in words:
+        if word in forbidden_words:
+            result.append(word[0] + "*"*(len(word)-2) + word[-1])
+        else:
+            result.append(word)
+    return " ".join(result)
+
+
 @register.filter(name='censor')
 def censor(value):
 
